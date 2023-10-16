@@ -2,23 +2,20 @@ package linked_list
 
 import "fmt"
 
-func aaa(x, y int) int {
-	return x + y
+type Node[T any] struct { // hanldes any type, needs tighter constraint probably
+	next  *Node[T]
+	value T
 }
 
-type Node struct {
-	next  *Node
-	value int
-}
-type LL struct {
-	root *Node
+type LL[T any] struct { // The Type parameter should have same constraint as Node(?)
+	root *Node[T]
 }
 
-func NewLL() LL {
-	return LL{}
+func NewLL[T any]() *LL[T] { // return pointer to new LL
+	return &LL[T]{}
 }
 
-func (ll *LL) Print() {
+func (ll *LL[T]) Print() {
 	node := ll.root
 	for node != nil {
 		fmt.Println(node.value)
@@ -27,9 +24,9 @@ func (ll *LL) Print() {
 }
 
 // Push new element to the end of the queue
-func (ll *LL) Push(value int) {
+func (ll *LL[T]) Push(value T) { // Pointer receiver
 	if ll.root == nil {
-		ll.root = &Node{value: value}
+		ll.root = &Node[T]{value: value}
 		return
 	}
 
@@ -37,13 +34,13 @@ func (ll *LL) Push(value int) {
 	for node.next != nil {
 		node = node.next
 	}
-	node.next = &Node{value: value}
+	node.next = &Node[T]{value: value}
 
 }
 
 // Pop first element from the queue
 
-func (ll *LL) Pop() {
+func (ll *LL[T]) Pop() {
 
 	if ll.root == nil {
 		return
